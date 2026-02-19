@@ -5,15 +5,17 @@ def detect_shell_chains(G, cycle_results, max_depth=5):
     - Intermediate nodes must have total_degree <= 3
     - Intermediate nodes must NOT belong to any detected cycle
     """
-
     shell_results = []
     visited_chains = set()
 
-    # Collect all cycle members
-    cycle_nodes = set()
-    for cycle in cycle_results:
-        for node in cycle["members"]:
-            cycle_nodes.add(node)
+    # Collect all cycle members to exclude
+    cycle_nodes = set(node for cycle in cycle_results for node in cycle["members"])
+
+    # Only start DFS from low-degree non-cycle nodes (performance optimization)
+    candidate_nodes = [
+        n for n in G.nodes
+        if G.degree(n) <= 3 and n not in cycle_nodes
+    ]
 
     def dfs(current, path):
         if len(path) > max_depth:
@@ -23,31 +25,24 @@ def detect_shell_chains(G, cycle_results, max_depth=5):
             if neighbor in path:
                 continue
 
+            # skip neighbors that are in cycles or high-degree
+            if neighbor in cycle_nodes or G.degree(neighbor) > 3:
+                continue
+
             new_path = path + [neighbor]
 
             if len(new_path) >= 4:
-                intermediates = new_path[1:-1]
-                valid_chain = True
-
-                for node in intermediates:
-                    total_degree = G.degree(node)
-
-                    if total_degree > 3 or node in cycle_nodes:
-                        valid_chain = False
-                        break
-
-                if valid_chain:
-                    chain_tuple = tuple(new_path)
-                    if chain_tuple not in visited_chains:
-                        visited_chains.add(chain_tuple)
-                        shell_results.append({
-                            "members": new_path,
-                            "pattern": "shell_chain"
-                        })
+                chain_tuple = tuple(new_path)
+                if chain_tuple not in visited_chains:
+                    visited_chains.add(chain_tuple)
+                    shell_results.append({
+                        "members": new_path,
+                        "pattern": "shell_chain"
+                    })
 
             dfs(neighbor, new_path)
 
-    for node in G.nodes():
+    for node in candidate_nodes:
         dfs(node, [node])
 
     return shell_results

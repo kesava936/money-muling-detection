@@ -12,30 +12,37 @@ def detect_cycles(G, max_cycles=200):
     """
     Detect simple cycles of length 3–5.
 
-    max_cycles: hard cap to prevent hanging on dense graphs.
-                Once we've collected enough cycles we stop early.
+    Optimizations:
+    - Only searches within Strongly Connected Components (remote improvement)
+    - Early exit after max_cycles to prevent hanging on dense graphs (our fix)
     """
     unique_cycles = set()
     results = []
 
-    # nx.simple_cycles is a generator — we consume it lazily
-    # so we can break early without iterating the whole graph.
-    for cycle in nx.simple_cycles(G):
-        length = len(cycle)
+    # Only check nodes that can possibly be in a cycle (SCC optimization)
+    for scc in nx.strongly_connected_components(G):
+        if len(scc) < 3:
+            continue
 
-        if 3 <= length <= 5:
-            normalized = normalize_cycle(cycle)
-            cycle_tuple = tuple(normalized)
+        subgraph = G.subgraph(scc).copy()
 
-            if cycle_tuple not in unique_cycles:
-                unique_cycles.add(cycle_tuple)
-                results.append({
-                    "members": normalized,
-                    "pattern": f"cycle_length_{length}"
-                })
+        # consume generator lazily — break early once cap is hit
+        for cycle in nx.simple_cycles(subgraph):
+            length = len(cycle)
 
-                # ← early exit: stop after enough cycles found
-                if len(results) >= max_cycles:
-                    break
+            if 3 <= length <= 5:
+                normalized = normalize_cycle(cycle)
+                cycle_tuple = tuple(normalized)
+
+                if cycle_tuple not in unique_cycles:
+                    unique_cycles.add(cycle_tuple)
+                    results.append({
+                        "members": list(normalized),
+                        "pattern": f"cycle_length_{length}"
+                    })
+
+                    # early exit cap
+                    if len(results) >= max_cycles:
+                        return results
 
     return results

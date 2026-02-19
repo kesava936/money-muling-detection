@@ -1,0 +1,219 @@
+{
+  "suspicious_accounts": [
+    {
+      "account_id": "ACC_001",
+      "suspicion_score": 85.0,
+      "detected_patterns": [
+        "cycle_length_3"
+      ],
+      "ring_id": "RING_001"
+    },
+    {
+      "account_id": "ACC_002",
+      "suspicion_score": 85.0,
+      "detected_patterns": [
+        "cycle_length_3"
+      ],
+      "ring_id": "RING_001"
+      
+    },
+    {
+      "account_id": "ACC_003",
+      "suspicion_score": 85.0,
+      "detected_patterns": [
+        "cycle_length_3"
+      ],
+      "ring_id": "RING_001"
+    },
+    {
+      "account_id": "ACC_004",
+      "suspicion_score": 80.0,
+      "detected_patterns": [
+        "cycle_length_4"
+      ],
+      "ring_id": "RING_002"
+    },
+    {
+      "account_id": "ACC_005",
+      "suspicion_score": 80.0,
+      "detected_patterns": [
+        "cycle_length_4"
+      ],
+      "ring_id": "RING_002"
+    },
+    {
+      "account_id": "ACC_006",
+      "suspicion_score": 80.0,
+      "detected_patterns": [
+        "cycle_length_4"
+      ],
+      "ring_id": "RING_002"
+    },
+    {
+      "account_id": "ACC_007",
+      "suspicion_score": 80.0,
+      "detected_patterns": [
+        "cycle_length_4"
+      ],
+      "ring_id": "RING_002"
+    },
+    {
+      "account_id": "ACC_011",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_in"
+      ],
+      "ring_id": "RING_003"
+    },
+    {
+      "account_id": "ACC_012",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_in"
+      ],
+      "ring_id": "RING_003"
+    },
+    {
+      "account_id": "ACC_013",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_in"
+      ],
+      "ring_id": "RING_003"
+    },
+    {
+      "account_id": "ACC_020",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_out"
+      ],
+      "ring_id": "RING_004"
+    },
+    {
+      "account_id": "ACC_021",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_out"
+      ],
+      "ring_id": "RING_004"
+    },
+    {
+      "account_id": "ACC_022",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_out"
+      ],
+      "ring_id": "RING_004"
+    },
+    {
+      "account_id": "ACC_023",
+      "suspicion_score": 70.0,
+      "detected_patterns": [
+        "fan_out"
+      ],
+      "ring_id": "RING_004"
+    },
+    {
+      "account_id": "ACC_030",
+      "suspicion_score": 65.0,
+      "detected_patterns": [
+        "shell_chain"
+      ],
+      "ring_id": "RING_005"
+    },
+    {
+      "account_id": "ACC_031",
+      "suspicion_score": 65.0,
+      "detected_patterns": [
+        "shell_chain"
+      ],
+      "ring_id": "RING_005"
+    },
+    {
+      "account_id": "ACC_032",
+      "suspicion_score": 65.0,
+      "detected_patterns": [
+        "shell_chain"
+      ],
+      "ring_id": "RING_005"
+    },
+    {
+      "account_id": "ACC_033",
+      "suspicion_score": 65.0,
+      "detected_patterns": [
+        "shell_chain"
+      ],
+      "ring_id": "RING_005"
+    },
+    {
+      "account_id": "ACC_010",
+      "suspicion_score": 28.0,
+      "detected_patterns": [
+        "fan_in"
+      ],
+      "ring_id": "RING_003"
+    }
+  ],
+  "fraud_rings": [
+    {
+      "ring_id": "RING_001",
+      "member_accounts": [
+        "ACC_001",
+        "ACC_002",
+        "ACC_003"
+      ],
+      "pattern_type": "cycle",
+      "risk_score": 95.0
+    },
+    {
+      "ring_id": "RING_002",
+      "member_accounts": [
+        "ACC_004",
+        "ACC_005",
+        "ACC_006",
+        "ACC_007"
+      ],
+      "pattern_type": "cycle",
+      "risk_score": 95.0
+    },
+    {
+      "ring_id": "RING_003",
+      "member_accounts": [
+        "ACC_010",
+        "ACC_011",
+        "ACC_012",
+        "ACC_013"
+      ],
+      "pattern_type": "fan_in",
+      "risk_score": 85.0
+    },
+    {
+      "ring_id": "RING_004",
+      "member_accounts": [
+        "ACC_020",
+        "ACC_021",
+        "ACC_022",
+        "ACC_023"
+      ],
+      "pattern_type": "fan_out",
+      "risk_score": 85.0
+    },
+    {
+      "ring_id": "RING_005",
+      "member_accounts": [
+        "ACC_030",
+        "ACC_031",
+        "ACC_032",
+        "ACC_033"
+      ],
+      "pattern_type": "shell_chain",
+      "risk_score": 75.0
+    }
+  ],
+  "summary": {
+    "total_accounts_analyzed": 500,
+    "suspicious_accounts_flagged": 19,
+    "fraud_rings_detected": 5,
+    "processing_time_seconds": 0.0
+  }
+}
