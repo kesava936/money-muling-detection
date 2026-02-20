@@ -79,7 +79,7 @@ if __name__ == "__main__":
     import json
     import time
 
-    file_path = "sample.csv"
+    file_path = "transactions.csv"
 
     try:
         start = time.time()

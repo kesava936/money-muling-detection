@@ -26,7 +26,7 @@ function UploadSection({ setData, hasData }) {
       setTimeout(() => setStep(3), 1400);
 
       const res = await axios.post(
-        "https://money-muling-detection-5.onrender.com/analyze",
+        "http://localhost:5001/analyze",
         formData,
         {
           headers: {
@@ -50,7 +50,7 @@ function UploadSection({ setData, hasData }) {
       console.error(err);
       setLoading(false);
       setStep(0);
-      const msg = err?.response?.data?.error || err.message || "Backend connection failed. Make sure Flask is running on port 5000.";
+      const msg = err?.response?.data?.error || err.message || "Backend connection failed. Make sure Flask is running on port 5001.";
       alert("❌ Error: " + msg);
     }
   };

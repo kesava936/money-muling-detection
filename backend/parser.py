@@ -21,9 +21,14 @@ def parse_csv(file_path):
 
     df["timestamp"] = pd.to_datetime(
         df["timestamp"],
-        format="%Y-%m-%d %H:%M:%S",
-        errors="raise"
+        errors="coerce"
     )
+
+    # Drop rows where timestamp couldn't be parsed
+    bad = df["timestamp"].isna().sum()
+    if bad > 0:
+        print(f"Warning: {bad} rows had unparseable timestamps and were dropped.")
+    df = df.dropna(subset=["timestamp"])
 
     df = df.drop_duplicates()
 

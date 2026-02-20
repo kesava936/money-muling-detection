@@ -30,7 +30,9 @@ def build_rings_and_assign_ids(detections, suspicious_accounts):
 
     for cluster in detections.get("fan_in", []):
         ring_id = get_ring_id()
-        members = cluster.get("members", [])
+        aggregator = cluster.get("aggregator")
+        senders = cluster.get("senders", [])
+        members = ([aggregator] if aggregator else []) + senders
 
         for acc in members:
             account_to_ring[acc] = ring_id
@@ -44,7 +46,9 @@ def build_rings_and_assign_ids(detections, suspicious_accounts):
 
     for cluster in detections.get("fan_out", []):
         ring_id = get_ring_id()
-        members = cluster.get("members", [])
+        distributor = cluster.get("distributor")
+        receivers = cluster.get("receivers", [])
+        members = ([distributor] if distributor else []) + receivers
 
         for acc in members:
             account_to_ring[acc] = ring_id
@@ -58,7 +62,7 @@ def build_rings_and_assign_ids(detections, suspicious_accounts):
 
     for chain in detections.get("shell_chains", []):
         ring_id = get_ring_id()
-        members = chain.get("members", [])
+        members = chain.get("path", chain.get("members", []))
 
         for acc in members:
             account_to_ring[acc] = ring_id
