@@ -114,6 +114,6 @@ ACC_103,ACC_101,480.0,2026-04-26T10:30:00Z
 
 ---
 
-## 🛡️ License
 
-This project is licensed under the MIT License.
+
+
