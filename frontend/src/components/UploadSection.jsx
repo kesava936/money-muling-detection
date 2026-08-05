@@ -26,7 +26,7 @@ function UploadSection({ setData, hasData }) {
       setTimeout(() => setStep(3), 1400);
 
       const res = await axios.post(
-        "https://money-muling-detection-5.onrender.com/analyze",
+        "http://localhost:5001/analyze",
         formData,
         {
           headers: {

@@ -3,9 +3,9 @@ import time
 import os
 
 
-def build_final_json(suspicious_accounts, fraud_rings, total_accounts, start_time):
+def build_final_json(suspicious_accounts, fraud_rings, graph_data, total_accounts, start_time):
     """
-    Builds final JSON exactly as hackathon requires
+    Builds final JSON with graph data included for frontend rendering.
     """
 
     # =========================
@@ -24,7 +24,9 @@ def build_final_json(suspicious_accounts, fraud_rings, total_accounts, start_tim
         "total_accounts_analyzed": total_accounts,
         "suspicious_accounts_flagged": len(suspicious_accounts),
         "fraud_rings_detected": len(fraud_rings),
-        "processing_time_seconds": round(time.time() - start_time, 2)
+        "processing_time_seconds": round(time.time() - start_time, 2),
+        "total_graph_nodes": len(graph_data.get("nodes", [])),
+        "total_graph_edges": len(graph_data.get("edges", [])),
     }
 
     # =========================
@@ -33,6 +35,7 @@ def build_final_json(suspicious_accounts, fraud_rings, total_accounts, start_tim
     final_json = {
         "suspicious_accounts": suspicious_accounts,
         "fraud_rings": fraud_rings,
+        "graph": graph_data,
         "summary": summary
     }
 

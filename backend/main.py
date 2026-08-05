@@ -1,5 +1,5 @@
 from parser import parse_csv
-from graph_builder import build_graph
+from graph_builder import build_graph, extract_graph_data
 from detectors.cycle import detect_cycles
 from detectors.smurf import detect_smurfing
 from detectors.shell import detect_shell_chains
@@ -41,9 +41,9 @@ def detect_patterns(df, G):
 def count_transactions(df):
     counts = {}
 
-    for _, row in df.iterrows():
-        sender = row["sender_id"]
-        receiver = row["receiver_id"]
+    for row in df.itertuples(index=False):
+        sender = str(row.sender_id)
+        receiver = str(row.receiver_id)
         counts[sender] = counts.get(sender, 0) + 1
         counts[receiver] = counts.get(receiver, 0) + 1
 
@@ -65,9 +65,13 @@ def run_pipeline(file_path, start_time):
         suspicious_accounts
     )
 
+    # Build explicit graph data for frontend rendering
+    graph_data = extract_graph_data(G, suspicious_accounts, fraud_rings)
+
     final_json = build_final_json(
         suspicious_accounts,
         fraud_rings,
+        graph_data,
         total_accounts=len(transaction_counts),
         start_time=start_time
     )
@@ -88,12 +92,19 @@ if __name__ == "__main__":
         print("Number of edges:", G.number_of_edges())
 
         print("\n=== Detection Results ===")
-        print("Cycles:", results["cycles"])
-        print("Fan-In:", results["fan_in"])
-        print("Fan-Out:", results["fan_out"])
-        print("Shell Chains:", results["shell_chains"])
-        print("\n=== Final Output ===")
-        print(json.dumps(final_json, indent=2))
+        print("Cycles:", len(results["cycles"]))
+        print("Fan-In:", len(results["fan_in"]))
+        print("Fan-Out:", len(results["fan_out"]))
+        print("Shell Chains:", len(results["shell_chains"]))
+
+        print("\n=== Graph Data ===")
+        print("Graph nodes:", len(final_json["graph"]["nodes"]))
+        print("Graph edges:", len(final_json["graph"]["edges"]))
+
+        print("\n=== Summary ===")
+        print(json.dumps(final_json["summary"], indent=2))
 
     except Exception as e:
+        import traceback
         print("Error occurred:", str(e))
+        traceback.print_exc()

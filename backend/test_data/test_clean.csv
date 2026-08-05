@@ -1,0 +1,6 @@
+transaction_id,sender_id,receiver_id,amount,timestamp
+T01,Alice,Bob,500,2024-05-01 09:00:00
+T02,Bob,Carol,120,2024-05-01 10:00:00
+T03,Carol,Dave,200,2024-05-02 11:00:00
+T04,Dave,Eve,80,2024-05-03 14:00:00
+T05,Eve,Frank,300,2024-05-04 15:00:00
