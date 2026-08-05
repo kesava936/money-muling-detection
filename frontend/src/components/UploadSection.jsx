@@ -25,8 +25,12 @@ function UploadSection({ setData, hasData }) {
       setTimeout(() => setStep(2), 600);
       setTimeout(() => setStep(3), 1400);
 
+      const API_URL = import.meta.env.PROD 
+        ? "https://money-muling-detection-5.onrender.com/analyze" 
+        : "/analyze";
+
       const res = await axios.post(
-        "/analyze",
+        API_URL,
         formData,
         {
           headers: {
@@ -50,7 +54,15 @@ function UploadSection({ setData, hasData }) {
       console.error(err);
       setLoading(false);
       setStep(0);
-      const msg = err?.response?.data?.error || err.message || "Backend connection failed. Make sure Flask is running on port 5001.";
+      let msg = err?.response?.data?.error || err.message || "Backend connection failed.";
+      
+      // If the proxy is missing and Vite catches the request, it might return 404 HTML
+      if (err?.response?.status === 404) {
+        msg = "Vite Proxy not found! You MUST restart your frontend terminal (Ctrl+C then npm run dev) to apply the proxy fix.";
+      } else if (typeof msg === 'object') {
+        msg = "Proxy/Network Object Error: " + JSON.stringify(msg) + ". Ensure backend is running.";
+      }
+      
       alert("❌ Error: " + msg);
     }
   };
